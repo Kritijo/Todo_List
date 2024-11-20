@@ -10,7 +10,7 @@
 body{
     height: 100vh;
     display: grid;
-    grid-template-rows: 10vh 1fr;
+    grid-template-rows: 0.1fr 1fr;
 }
 
 nav{
@@ -20,6 +20,7 @@ nav{
     justify-content:space-around;
     align-items: center;
     background: #eecece;
+    border-bottom: 5px solid #333;
 }
 
 h1{
@@ -50,11 +51,32 @@ nav > button{
 
 .menu{
     grid-row:1/-1;
-    background-color: #e9eef7;
+    background-color: #f9fcff;
+    border-right:2px dashed #333;
+    padding: 4vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:10%;
+}
+
+.menu-items{
+    padding: 1rem;
+    text-align: center;
+    width: 180px;
+    font-size: larger;
+    background-color: #f7e5e3;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 3px 3px 1px #333;
+}
+
+.menu-items:hover{
+    box-shadow: 3px 3px 4px #333;
 }
 
 .todo-section{
-    height: 90vh;
+    /* height: 90vh; */
     display: grid;
     overflow: auto;
     padding: 10px;
