@@ -1,5 +1,5 @@
 import "../styles.css";
-import {displayMenu, disableMenu} from "./menu";
+import {displayMenu, disableMenu, setupMenu} from "./menu";
 import {createTodo, editTodo} from "./todos";
 
 let toggle = true;
@@ -30,4 +30,5 @@ menuToggle.addEventListener("click",()=>{
     }
 });
 
+setupMenu();
 export {displayBoard,todoSection};
