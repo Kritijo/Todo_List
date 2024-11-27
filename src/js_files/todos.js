@@ -57,8 +57,11 @@ export function editTodo(e){
             todo.check = e.checked;
             if (todo.check === true){
                 const id = defaultList.findIndex(obj=>obj.id == todoId)
-                defaultList.splice(id,1);
-                completedList.push(todo);
+                setTimeout(() => {
+                    defaultList.splice(id,1);
+                    completedList.push(todo);
+                    displayTodo(defaultList);
+                }, 300);
             }
         }
     }

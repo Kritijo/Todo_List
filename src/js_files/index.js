@@ -24,6 +24,7 @@ menuToggle.addEventListener("click",()=>{
     toggle = !toggle;
     if(toggle){
         displayMenu();
+        setupMenu();
     }
     else{
         disableMenu();
