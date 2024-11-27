@@ -21,7 +21,49 @@ function generateTodoQeury(id){
     return [todoQuery,id,button,task,date,priority];
 }
 
+export function createTodo() {
+    const id = Date.now();
+    let [todoQuery,_,button,task,date,priority] = generateTodoQeury(id);
+    todoSection.append(todoQuery);
+    task.focus();
+    defaultList.push(new Todo(id, button.checked, task.value, date.value, priority.value));
+}
 
+function displayTodo(list=defaultList){
+    todoSection.innerHTML = '';
+
+    list.forEach(todo => {
+        let [todoQuery,_,button,task,date,priority] = generateTodoQeury(todo.id);
+        button.checked = todo.check;
+        task.value = todo.task;
+        date.value = todo.date;
+        priority.value = todo.priority;
+        todoSection.append(todoQuery);
+    });
+}
+
+export function editTodo(e){
+    const todoId = e.getAttribute("data-id");
+    const todo = defaultList.find(todo => todo.id == todoId);
+    
+    if(todo){
+        if(e.classList.contains("task")){
+            todo.task = e.value;
+        } else if(e.classList.contains("date")){
+            todo.date = e.value;
+        } else if(e.classList.contains("priority")){
+            todo.priority = e.value;
+        } else if(e.classList.contains("bttn")){
+            todo.check = e.checked;
+            if (todo.check === true){
+                const id = defaultList.findIndex(obj=>obj.id == todoId)
+                defaultList.splice(id,1);
+                completedList.push(todo);
+            }
+        }
+    }
+    displayTodo(defaultList);
+}
 
 class Todo{
     constructor(id, checked, task, date, priority){
@@ -33,4 +75,19 @@ class Todo{
     }
 }
 
-
+export function filterTodos(filter) {
+    switch (filter) {
+        case "all":
+            displayTodo(defaultList);
+            break;
+        case "completed":
+            displayTodo(completedList);
+            break;
+        case "incomplete":
+            displayTodo(defaultList.filter(todo => !todo.check));
+            break;
+        default:
+            displayTodo(defaultList);
+            break;
+    }
+}
