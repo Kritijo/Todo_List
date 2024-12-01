@@ -16,14 +16,15 @@ function generateTodoQeury(id){
     const task = createElement("input", ["task", "todoElem"], { "data-id": id });
     const date = createElement("input", ["date", "todoElem"], { type: "date", "data-id": id });
     const priority = createElement("input", ["priority", "todoElem"], { type: "color", "data-id": id });
+    const del = createElement("input", ["del", "todoElem"], { type: "checkbox", "data-id": id });
 
-    todoQuery.append(button,task,date,priority);
-    return [todoQuery,id,button,task,date,priority];
+    todoQuery.append(button,task,date,priority,del);
+    return [todoQuery,button,task,date,priority];
 }
 
 export function createTodo() {
     const id = Date.now();
-    let [todoQuery,_,button,task,date,priority] = generateTodoQeury(id);
+    let [todoQuery,button,task,date,priority] = generateTodoQeury(id);
     todoSection.append(todoQuery);
     task.focus();
     defaultList.push(new Todo(id, button.checked, task.value, date.value, priority.value));
@@ -33,7 +34,7 @@ function displayTodo(list=defaultList){
     todoSection.innerHTML = '';
 
     list.forEach(todo => {
-        let [todoQuery,_,button,task,date,priority] = generateTodoQeury(todo.id);
+        let [todoQuery,button,task,date,priority] = generateTodoQeury(todo.id);
         button.checked = todo.check;
         task.value = todo.task;
         date.value = todo.date;
@@ -45,6 +46,7 @@ function displayTodo(list=defaultList){
 export function editTodo(e){
     const todoId = e.getAttribute("data-id");
     const todo = defaultList.find(todo => todo.id == todoId);
+    const id = defaultList.findIndex(obj=>obj.id == todoId)
     
     if(todo){
         if(e.classList.contains("task")){
@@ -56,13 +58,15 @@ export function editTodo(e){
         } else if(e.classList.contains("bttn")){
             todo.check = e.checked;
             if (todo.check === true){
-                const id = defaultList.findIndex(obj=>obj.id == todoId)
                 setTimeout(() => {
                     defaultList.splice(id,1);
                     completedList.push(todo);
                     displayTodo(defaultList);
                 }, 300);
             }
+        } else if(e.classList.contains("del")){
+            defaultList.splice(id,1);
+            displayTodo(defaultList);
         }
     }
     displayTodo(defaultList);
