@@ -16,9 +16,10 @@ function generateTodoQeury(id){
     const task = createElement("input", ["task", "todoElem"], { "data-id": id });
     const date = createElement("input", ["date", "todoElem"], { type: "date", "data-id": id });
     const priority = createElement("input", ["priority", "todoElem"], { type: "color", "data-id": id });
-    const del = createElement("input", ["del", "todoElem"], { type: "checkbox", "data-id": id });
+    const del = createElement("input", ["delBox", "todoElem"], { type: "checkbox", "data-id": id, id : "deleteCheckbox"});
+    const label = createElement("label", ["del"], {for:"deleteCheckbox"});
 
-    todoQuery.append(button,task,date,priority,del);
+    todoQuery.append(button,task,date,priority,del,label);
     return [todoQuery,button,task,date,priority];
 }
 
@@ -64,7 +65,7 @@ export function editTodo(e){
                     displayTodo(defaultList);
                 }, 300);
             }
-        } else if(e.classList.contains("del")){
+        } else if(e.classList.contains("delBox")){
             defaultList.splice(id,1);
             displayTodo(defaultList);
         }
