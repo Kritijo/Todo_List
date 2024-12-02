@@ -11,13 +11,13 @@ function createElement(type, classes = [], attributes = {}) {
 }
 
 function generateTodoQeury(id){
-    const todoQuery = createElement("div", ["todoQuery"], { "data-id": id });
+    const todoQuery = createElement("div", ["todoQuery"], { "data-id": id});
     const button = createElement("input", ["bttn", "todoElem"], { type: "checkbox", "data-id": id });
     const task = createElement("input", ["task", "todoElem"], { "data-id": id });
     const date = createElement("input", ["date", "todoElem"], { type: "date", "data-id": id });
     const priority = createElement("input", ["priority", "todoElem"], { type: "color", "data-id": id });
-    const del = createElement("input", ["delBox", "todoElem"], { type: "checkbox", "data-id": id, id : "deleteCheckbox"});
-    const label = createElement("label", ["del"], {for:"deleteCheckbox"});
+    const del = createElement("input", ["delBox", "todoElem"], { type: "checkbox", "data-id": id, id:id});
+    const label = createElement("label", ["del"], {for:id});
 
     todoQuery.append(button,task,date,priority,del,label);
     return [todoQuery,button,task,date,priority];
