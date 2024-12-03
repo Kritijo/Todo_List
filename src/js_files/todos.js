@@ -1,7 +1,27 @@
 import { todoSection } from "./index.js";
+import {projectList} from "./menu.js"
 
-const defaultList = []
 const completedList = [];
+let defaultList = [];
+let list;
+
+export function useList(li=null){
+    if(li) list = li;
+    else list = defaultList;
+}
+
+document.addEventListener("click",(e)=>{
+    if(e.target.classList.contains('project-items')){
+        projectList.forEach(item=>{
+            if(item.name === e.target.textContent){
+                useList(item.todo);
+                displayTodo(item.todo);
+            }
+        });
+    }
+})
+
+useList();
 
 function createElement(type, classes = [], attributes = {}) {
     const element = document.createElement(type);
@@ -28,12 +48,12 @@ export function createTodo() {
     let [todoQuery,button,task,date,priority] = generateTodoQeury(id);
     todoSection.append(todoQuery);
     task.focus();
-    defaultList.push(new Todo(id, button.checked, task.value, date.value, priority.value));
+    list.push(new Todo(id, button.checked, task.value, date.value, priority.value));
 }
 
-function displayTodo(list=defaultList){
+function displayTodo(list){
     todoSection.innerHTML = '';
-
+    
     list.forEach(todo => {
         let [todoQuery,button,task,date,priority] = generateTodoQeury(todo.id);
         button.checked = todo.check;
@@ -46,8 +66,8 @@ function displayTodo(list=defaultList){
 
 export function editTodo(e){
     const todoId = e.getAttribute("data-id");
-    const todo = defaultList.find(todo => todo.id == todoId);
-    const id = defaultList.findIndex(obj=>obj.id == todoId)
+    const todo = list.find(todo => todo.id == todoId);
+    const id = list.findIndex(obj=>obj.id == todoId)
     
     if(todo){
         if(e.classList.contains("task")){
@@ -60,17 +80,17 @@ export function editTodo(e){
             todo.check = e.checked;
             if (todo.check === true){
                 setTimeout(() => {
-                    defaultList.splice(id,1);
+                    list.splice(id,1);
                     completedList.push(todo);
-                    displayTodo(defaultList);
+                    displayTodo(list);
                 }, 300);
             }
         } else if(e.classList.contains("delBox")){
-            defaultList.splice(id,1);
-            displayTodo(defaultList);
+            list.splice(id,1);
+            displayTodo(list);
         }
     }
-    displayTodo(defaultList);
+    displayTodo(list);
 }
 
 class Todo{
@@ -86,16 +106,16 @@ class Todo{
 export function filterTodos(filter) {
     switch (filter) {
         case "all":
-            displayTodo(defaultList);
+            displayTodo(list);
             break;
         case "completed":
             displayTodo(completedList);
             break;
         case "incomplete":
-            displayTodo(defaultList.filter(todo => !todo.check));
+            displayTodo(list.filter(todo => !todo.check && Date.parse(todo.date) > Date.now()));
             break;
         default:
-            displayTodo(defaultList);
+            displayTodo(list);
             break;
     }
 }
