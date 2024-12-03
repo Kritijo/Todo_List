@@ -1,10 +1,10 @@
 import {displayBoard} from "./index.js"
-import { useList, filterTodos } from "./todos.js";
+import {filterTodos} from "./todos.js";
 
-let menu = document.querySelector(".menu");
-export let projectList = [];
+const menu = document.querySelector(".menu");
+let projectList = [];
 
-export function displayMenu(){
+function displayMenu(){
     menu.className = "menu";
     displayBoard.style.gridTemplateColumns = "30vw 1fr"
     let arr = ["All tasks", "Completed", "Upcoming", "Projects"];
@@ -34,13 +34,13 @@ function displayProjects(){
     })
 }
 
-export function disableMenu(){
+function disableMenu(){
     menu.textContent = '';
     displayBoard.style.gridTemplateColumns = "1fr"
     menu.classList.remove("menu");
 }
 
-export function setupMenu() {
+function setupMenu() {
     const allTasksButton = document.querySelector(".all-tasks");
     const completedTasksButton = document.querySelector(".completed-tasks");
     const incompleteTasksButton = document.querySelector(".incomplete-tasks");
@@ -60,3 +60,5 @@ export function setupMenu() {
         }
     });
 };
+
+export {setupMenu,disableMenu,displayMenu,projectList};
