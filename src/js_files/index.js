@@ -27,6 +27,7 @@ const checkScreenSize = () => {
         menuVisible = false;
     } else if(!menuVisible){
         displayMenu();
+        setupMenu();
         menuVisible = true;
     }
 };
@@ -38,7 +39,6 @@ menuToggle.addEventListener("click",()=>{
     toggle = !toggle;
     if(toggle){
         displayMenu();
-        setupMenu();
     }
     else{
         disableMenu();

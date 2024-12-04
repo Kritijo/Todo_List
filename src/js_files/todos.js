@@ -1,13 +1,12 @@
-import { todoSection } from "./index.js";
-import {projectList} from "./menu.js"
+import {todoSection} from "./index.js";
 
 const completedList = [];
-let defaultList = [];
+const projectList = [{"name":"Default", "todo":[]}];
 let list;
 
 function useList(li=null){
     if(li) list = li;
-    else list = defaultList;
+    else list = projectList[0].todo;
 }
 
 document.addEventListener("click",(e)=>{
@@ -103,7 +102,9 @@ class Todo{
 function filterTodos(filter) {
     switch (filter) {
         case "all":
-            displayTodo(list);
+            let li = [];
+            projectList.forEach(project=>project.todo.forEach(item=>li.push(item)));
+            displayTodo(li);
             break;
         case "completed":
             displayTodo(completedList);
@@ -117,4 +118,4 @@ function filterTodos(filter) {
     }
 }
 
-export {createTodo, editTodo, filterTodos}
+export {createTodo, editTodo, filterTodos, projectList}

@@ -1,8 +1,7 @@
 import {displayBoard} from "./index.js"
-import {filterTodos} from "./todos.js";
+import {filterTodos, projectList} from "./todos.js";
 
 const menu = document.querySelector(".menu");
-let projectList = [];
 
 function displayMenu(){
     menu.className = "menu";
@@ -17,9 +16,7 @@ function displayMenu(){
         menu.append(menuItems);
     }
 
-    if(projectList.length != 0){
-            displayProjects();
-    }
+    displayProjects();
 }
 
 function displayProjects(){
@@ -49,6 +46,7 @@ function setupMenu() {
     allTasksButton.addEventListener("click", () => filterTodos("all"));
     completedTasksButton.addEventListener("click", () => filterTodos("completed"));
     incompleteTasksButton.addEventListener("click", () => filterTodos("incomplete"));
+
     newProject.addEventListener("click", ()=>{
         let projectName = document.createElement("input");
         projectName.classList.add("menu-items","project-items");
@@ -61,4 +59,4 @@ function setupMenu() {
     });
 };
 
-export {setupMenu,disableMenu,displayMenu,projectList};
+export {setupMenu,disableMenu,displayMenu};
