@@ -4,17 +4,24 @@ import { displayProjects } from "./menu.js";
 const completedList = [];
 let projectList = [{"name":"Default", "todo":[]}];
 let list;
+let projectName;
 
-function useList(li=null){
-    if(li) list = li;
-    else list = projectList[0].todo;
+function useList(li=null,name="Default Project"){
+    if(li){
+        list = li; 
+        projectName = name;
+    }
+    else{
+        list = projectList[0].todo;
+        projectName = name;
+    }
 }
 
 document.addEventListener("click",(e)=>{
     if(e.target.classList.contains('project-items')){
         projectList.forEach(item=>{
             if(item.name === e.target.textContent){
-                useList(item.todo);
+                useList(item.todo, `${item.name} Project`);
                 displayTodo(item.todo, `${item.name} Project`);
             }
         });
@@ -70,7 +77,7 @@ function displayHeading(name){
     heading.textContent = `${name}`;
 
     const pattern = /Project$/;
-    if(pattern.test(name) && name != "Default Project"){
+    if(pattern.test(name) && !name.match(/^Upcoming .+ Project$/)){
         const del = createElement("input", ["delBox", "projectElem"], { type: "checkbox", id:name});
         const label = createElement("label", ["del"], {for:name});
         headingDiv.append(heading,del,label);
@@ -119,7 +126,7 @@ function editTodo(e){
         list.splice(id, 1);
     }
 
-    displayTodo(list);
+    displayTodo(list,projectName);
 }
 
 class Todo{
@@ -143,7 +150,7 @@ function filterTodos(filter) {
             displayTodo(completedList, "Completed Tasks");
             break;
         case "incomplete":
-            displayTodo(list.filter(todo => !todo.check && Date.parse(todo.date) > Date.now()), "Upcoming Tasks");
+            displayTodo(list.filter(todo => !todo.check && Date.parse(todo.date) > Date.now()), `Upcoming Tasks : ${projectName}`);
             break;
         default:
             displayTodo(list);
