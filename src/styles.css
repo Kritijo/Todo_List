@@ -104,7 +104,7 @@ nav > button{
     align-items: center;
     border-radius: 5px;
     border-left : 5px solid #858956;
-    background-color: #ecece9;
+    background-color: #f7f7f7;
 }
 
 .todoElem{
@@ -157,4 +157,21 @@ nav > button{
     background: url("./images/delete.svg") no-repeat center center; 
     background-size: contain; 
     cursor: pointer; 
+}
+
+.heading-div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    justify-self: center;
+    width: 50%;
+    background-color: #f4f5e2;
+    border-radius: 10px;
+    padding: 5px 15px;
+    margin-bottom: 10px;
+}
+
+.project-heading{
+    font-size: clamp(15px, 2vw, 22px);
+    font-weight: 500;
 }

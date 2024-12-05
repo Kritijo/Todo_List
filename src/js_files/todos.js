@@ -1,7 +1,8 @@
 import {todoSection} from "./index.js";
+import { displayProjects } from "./menu.js";
 
 const completedList = [];
-const projectList = [{"name":"Default", "todo":[]}];
+let projectList = [{"name":"Default", "todo":[]}];
 let list;
 
 function useList(li=null){
@@ -14,7 +15,7 @@ document.addEventListener("click",(e)=>{
         projectList.forEach(item=>{
             if(item.name === e.target.textContent){
                 useList(item.todo);
-                displayTodo(item.todo);
+                displayTodo(item.todo, `${item.name} Project`);
             }
         });
     }
@@ -49,9 +50,10 @@ function createTodo() {
     list.push(new Todo(id, button.checked, task.value, date.value, priority.value));
 }
 
-function displayTodo(list){
+function displayTodo(list,name="Default Project"){
     todoSection.innerHTML = '';
-    
+    displayHeading(name);
+
     list.forEach(todo => {
         let [todoQuery,button,task,date,priority] = generateTodoQeury(todo.id);
         button.checked = todo.check;
@@ -60,6 +62,37 @@ function displayTodo(list){
         priority.value = todo.priority;
         todoSection.append(todoQuery);
     });
+}
+
+function displayHeading(name){
+    let headingDiv = createElement("div",["heading-div"])
+    let heading = createElement("div",["project-heading"]);
+    heading.textContent = `${name}`;
+
+    const pattern = /Project$/;
+    if(pattern.test(name) && name != "Default Project"){
+        const del = createElement("input", ["delBox", "projectElem"], { type: "checkbox", id:name});
+        const label = createElement("label", ["del"], {for:name});
+        headingDiv.append(heading,del,label);
+        todoSection.append(headingDiv);
+        return;
+    }
+    headingDiv.append(heading);
+    todoSection.append(headingDiv);
+}
+
+function editProject(e){
+    let name = e.getAttribute("id");
+    name = name.split("Project")[0].trim();
+    if(name==="Default") return;
+    projectList.forEach((project,idx)=>{
+        if(project.name===name){
+            projectList.splice(idx,1);
+            useList();
+            displayProjects();
+            displayTodo(list);
+        }
+    })
 }
 
 function editTodo(e){
@@ -104,13 +137,13 @@ function filterTodos(filter) {
         case "all":
             let li = [];
             projectList.forEach(project=>project.todo.forEach(item=>li.push(item)));
-            displayTodo(li);
+            displayTodo(li, "All Tasks");
             break;
         case "completed":
-            displayTodo(completedList);
+            displayTodo(completedList, "Completed Tasks");
             break;
         case "incomplete":
-            displayTodo(list.filter(todo => !todo.check && Date.parse(todo.date) > Date.now()));
+            displayTodo(list.filter(todo => !todo.check && Date.parse(todo.date) > Date.now()), "Upcoming Tasks");
             break;
         default:
             displayTodo(list);
@@ -118,4 +151,4 @@ function filterTodos(filter) {
     }
 }
 
-export {createTodo, editTodo, filterTodos, projectList}
+export {createTodo, editTodo, filterTodos, projectList, editProject}

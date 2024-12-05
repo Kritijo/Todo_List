@@ -1,6 +1,6 @@
 import "../styles.css";
-import {displayMenu, disableMenu, setupMenu} from "./menu";
-import {createTodo, editTodo} from "./todos";
+import {displayMenu, disableMenu, setupMenu, displayProjects} from "./menu";
+import {createTodo, editTodo, editProject} from "./todos";
 
 let toggle = true;
 let menuVisible = true; 
@@ -17,6 +17,10 @@ bttn.addEventListener("click",()=>{
 document.addEventListener("change", (e)=>{
         if(e.target.classList.contains('todoElem')){
             editTodo(e.target);
+        }
+        if(e.target.classList.contains('projectElem')){
+            editProject(e.target);
+            displayProjects();
         }
 });
 
@@ -39,6 +43,7 @@ menuToggle.addEventListener("click",()=>{
     toggle = !toggle;
     if(toggle){
         displayMenu();
+        setupMenu();
     }
     else{
         disableMenu();

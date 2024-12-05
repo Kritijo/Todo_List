@@ -59,4 +59,4 @@ function setupMenu() {
     });
 };
 
-export {setupMenu,disableMenu,displayMenu};
+export {setupMenu,disableMenu,displayMenu,displayProjects};
