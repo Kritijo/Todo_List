@@ -1,8 +1,42 @@
 import {todoSection} from "./index.js";
 import { displayProjects } from "./menu.js";
 
-const completedList = [];
-let projectList = [{"name":"Default", "todo":[]}];
+let projectList;
+let completedList;
+function storageAvailable(type) {
+    let storage;
+    try {
+      storage = window[type];
+      const x = "__storage_test__";
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+    } catch (e) {
+      return ( e instanceof DOMException && e.name === "QuotaExceededError" && storage && storage.length !== 0)
+    }
+}
+
+if (storageAvailable("localStorage")) {
+    const savedProjects = localStorage.getItem("projectList");
+    const completed = localStorage.getItem("completedList");
+
+    if (savedProjects && completed) {
+        projectList = JSON.parse(savedProjects);
+        completedList = JSON.parse(completed);
+    } 
+    else if(savedProjects && !completed){
+        projectList = JSON.parse(savedProjects);
+        completedList = [];
+    }
+    else {
+        projectList = [{"name":"Default", "todo":[]}];
+        completedList = [];
+    }
+} else {
+    projectList = [{"name":"Default", "todo":[]}];
+    completedList = [];
+}
+
 let list;
 let projectName;
 
@@ -16,6 +50,7 @@ function useList(li=null,name="Default Project"){
         projectName = name;
     }
 }
+useList();
 
 document.addEventListener("click",(e)=>{
     if(e.target.classList.contains('project-items')){
@@ -27,7 +62,6 @@ document.addEventListener("click",(e)=>{
         });
     }
 })
-useList();
 
 function createElement(type, classes = [], attributes = {}) {
     const element = document.createElement(type);
@@ -69,6 +103,7 @@ function displayTodo(list,name="Default Project"){
         priority.value = todo.priority;
         todoSection.append(todoQuery);
     });
+    localStorage.setItem("projectList", JSON.stringify(projectList));
 }
 
 function displayHeading(name){
@@ -77,7 +112,7 @@ function displayHeading(name){
     heading.textContent = `${name}`;
 
     const pattern = /Project$/;
-    if(pattern.test(name) && !name.match(/^Upcoming .+ Project$/)){
+    if(pattern.test(name) && !name.match(/^Upcoming .+ Project$/) && !name.match(/^Default/)){
         const del = createElement("input", ["delBox", "projectElem"], { type: "checkbox", id:name});
         const label = createElement("label", ["del"], {for:name});
         headingDiv.append(heading,del,label);
@@ -120,6 +155,7 @@ function editTodo(e){
         setTimeout(() => {
             list.splice(id, 1);
             completedList.push(todo);
+            localStorage.setItem("completedList", JSON.stringify(completedList));
             displayTodo(list);
         }, 300);
     } else if (e.classList.contains("delBox")) {
@@ -158,4 +194,4 @@ function filterTodos(filter) {
     }
 }
 
-export {createTodo, editTodo, filterTodos, projectList, editProject}
+export {createTodo, editTodo, filterTodos, editProject, projectList}
